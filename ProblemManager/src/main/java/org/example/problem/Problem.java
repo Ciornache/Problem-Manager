@@ -1,5 +1,8 @@
 package org.example.problem;
 
+import jakarta.persistence.*;
+import org.example.author.Author;
+import org.example.group.Group;
 import org.example.utils.Config;
 import org.example.utils.CustomFonts;
 import org.example.utils.Spacer;
@@ -9,11 +12,48 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
+@Table(name = "problem")
+@NamedNativeQuery(name = "Problem.selectAll", query = "Select * from problem", resultClass = Problem.class)
+@NamedNativeQuery(name = "Problem.findById", query = "Select * from problem WHERE id = :id", resultClass = Problem.class)
+@NamedNativeQuery(name = "Problem.findByName", query = "Select * from problem WHERE name = :name", resultClass = Problem.class)
 public class Problem {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+    @Column(name = "name")
     private String name;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    @Column(name = "problem_link")
     private String link;
+    @Column(name = "solution_link")
     private String solutionLink;
-    int difficulty;
+    @Column(name = "difficulty")
+    private int difficulty;
+
+    @ManyToOne()
+    @JoinColumn(name = "author_id")
+    private Author author;
+    @ManyToOne()
+    @JoinColumn(name = "group_id")
+    private Group group;
+
+    public Problem(String name, String link, String solutionLink, int difficulty, Author author, Group group) {
+        this.name = name;
+        this.link = link;
+        this.solutionLink = solutionLink;
+        this.difficulty = difficulty;
+        this.author = author;
+        this.group = group;
+    }
 
     public Problem(String name, String link, String solutionLink, int difficulty) {
         this.name = name;
@@ -21,6 +61,8 @@ public class Problem {
         this.solutionLink = solutionLink;
         this.difficulty = difficulty;
     }
+
+    public Problem() {};
 
     public String getName() {
         return name;
@@ -103,4 +145,19 @@ public class Problem {
         return label;
     }
 
+    public Author getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Author author) {
+        this.author = author;
+    }
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
 }

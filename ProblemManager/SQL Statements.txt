@@ -1,0 +1,40 @@
+CREATE DATABASE problem_manager;
+
+USE problem_manager;
+
+CREATE TABLE Author(
+    id INT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL UNIQUE, 
+    CONSTRAINT PK_Author Primary Key(id));
+
+CREATE TABLE Grup (
+    id INT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(20) NOT NULL UNIQUE,
+    CONSTRAINT PK_Group Primary Key(id));
+
+CREATE TABLE Tag (
+    id INT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL UNIQUE,
+    CONSTRAINT PK_Tag Primary Key(id));
+
+CREATE TABLE Problem (
+     id INT NOT NULL AUTO_INCREMENT, 
+     name VARCHAR(100) NOT NULL,
+     problem_link varchar(200) NOT NULL,
+     solution_link varchar(100),
+     author_id INT NOT NULL,
+     group_id INT NOT NULL,
+     CONSTRAINT PK_Problem Primary Key(id), 
+     CONSTRAINT FK_Problem Foreign Key(author_id) REFERENCES Author(id),
+     CONSTRAINT FK_Problem2 Foreign Key(group_id) REFERENCES Grup(id));
+
+CREATE TABLE problem_tag(
+     id INT NOT NULL AUTO_INCREMENT,
+     tag_id INT NOT NULL, 
+     problem_id INT NOT NULL,
+     CONSTRAINT PK_Problem_tag Primary Key(id),
+     CONSTRAINT FK_Problem_tag FOREIGN KEY(tag_id) REFERENCES Tag(id),
+     CONSTRAINT FK_Problem_tag2 FOREIGN KEY(problem_id) REFERENCES Problem(id));
+
+
+alter table problem add column difficulty int not null;
