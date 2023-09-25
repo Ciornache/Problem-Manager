@@ -2,6 +2,7 @@ package org.example.tag;
 
 import jakarta.persistence.*;
 import org.example.author.Author;
+import org.example.utils.Model;
 
 import java.io.Serializable;
 
@@ -10,7 +11,8 @@ import java.io.Serializable;
 @NamedNativeQuery(name = "Tag.selectAll", query = "Select * from tag", resultClass = Tag.class)
 @NamedNativeQuery(name = "Tag.findById", query = "Select * from tag WHERE id = :id", resultClass = Tag.class)
 @NamedNativeQuery(name = "Tag.findByName", query = "Select * from tag WHERE name = :name", resultClass = Tag.class)
-public class Tag implements Serializable {
+@NamedNativeQuery(name = "Tag.reset", query = "Delete from tag")
+public class Tag extends Model implements Serializable {
     @Column(name = "id")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,30 +25,6 @@ public class Tag implements Serializable {
 
     public Tag(String name) {
         this.name = name;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public String toString() {
-        return "Author{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
     }
 
 }

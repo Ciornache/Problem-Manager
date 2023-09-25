@@ -18,11 +18,12 @@
         <!-- Automatically create/update database tables -->
         <property name="hibernate.hbm2ddl.auto">update</property>
 
-        <mapping class = "org.example.author"/>
-        <mapping class = "org.example.tag"/>
-        <mapping class = "org.example.problem"/>
-        <mapping class = "org.example.group"/>
-
+        <mapping class = "org.example.author.Author"/>
+        <mapping class = "org.example.tag.Tag"/>
+        <mapping class = "org.example.problem.Problem"/>
+        <mapping class = "org.example.group.Group"/>
+        <mapping class = "org.example.problem_tag.ProblemTag"/>
+        <mapping class = "org.example.utils.Model"/>
 
     </session-factory>
 </hibernate-configuration>

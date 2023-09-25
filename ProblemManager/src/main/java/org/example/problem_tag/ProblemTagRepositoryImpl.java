@@ -45,7 +45,7 @@ public class ProblemTagRepositoryImpl implements ProblemTagRepository{
         EntityManagerFactory emf = EntityBuilder.getInstance();
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
-        Query query = em.createNamedQuery("Problem.selectAll");
+        Query query = em.createNamedQuery("ProblemTag.selectAll");
         List<ProblemTag> problemTagList = query.getResultList();
         if(problemTagList.size() == 0)
             return null;
@@ -57,7 +57,7 @@ public class ProblemTagRepositoryImpl implements ProblemTagRepository{
         EntityManagerFactory emf = EntityBuilder.getInstance();
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
-        Query query = em.createNamedQuery("Problem.selectAll");
+        Query query = em.createNamedQuery("ProblemTag.findById");
         List<ProblemTag> problemTagList = query.getResultList();
         if(problemTagList.size() == 0)
             return null;
@@ -69,10 +69,20 @@ public class ProblemTagRepositoryImpl implements ProblemTagRepository{
         EntityManagerFactory emf = EntityBuilder.getInstance();
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
-        Query query = em.createNamedQuery("Problem.selectAll");
+        Query query = em.createNamedQuery("ProblemTag.findByName");
         List<ProblemTag> problemTagList = query.getResultList();
         if(problemTagList.size() == 0)
             return null;
         return problemTagList.get(0);
+    }
+
+    public static void reset()  {
+        EntityManagerFactory emf = EntityBuilder.getInstance();
+        EntityManager em = emf.createEntityManager();
+        Query query = em.createNamedQuery("ProblemTag.reset");
+        em.getTransaction().begin();
+        query.executeUpdate();
+        em.getTransaction().commit();
+        em.close();
     }
 }

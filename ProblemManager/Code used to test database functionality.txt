@@ -1,0 +1,39 @@
+ProblemRepository problemRepository = new ProblemRepositoryImpl();
+        CrudRepositoryInterface<Author> authorRepository = new AuthorRepository("Author", Author.class);
+        CrudRepositoryInterface<Group> groupRepository = new GroupRepository("Grup", Group.class);
+
+        Author author = new Author("Marin Preda");
+        Group group = new Group("Intermediate");
+
+        problemRepository.reset();
+        authorRepository.reset();
+        groupRepository.reset();
+
+        authorRepository.addItem(author);
+        groupRepository.addItem(group);
+
+        Author author2 = new Author("Mihai Eminescu");
+        authorRepository.addItem(author2);
+
+        List<Author> authorList = authorRepository.selectAll();
+        for(Author author1 : authorList)
+            System.out.println(author1);
+
+        authorRepository.deleteItem(author);
+
+        author = new Author("Ciprian Petre");
+        authorRepository.addItem(author);
+
+        authorList = authorRepository.selectAll();
+        for(Author author1 : authorList)
+            System.out.println(author1);
+
+        Author author3 = new Author("Romanul");
+        authorRepository.updateItem(author3, author.getId());
+
+        authorList = authorRepository.selectAll();
+        for(Author author1 : authorList)
+            System.out.println(author1);
+
+        Problem problem = new Problem("dasda", "fafasdasdas", "fafasdasda", 12, author, group);
+        problemRepository.addItem(problem);

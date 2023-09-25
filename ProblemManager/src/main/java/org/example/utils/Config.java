@@ -1,10 +1,24 @@
 package org.example.utils;
 
+import org.example.author.Author;
+import org.example.author.AuthorRepository;
+import org.example.group.Group;
+import org.example.group.GroupRepository;
+import org.example.problem.ProblemRepository;
+import org.example.problem.ProblemRepositoryImpl;
+import org.example.problem_tag.ProblemTagRepository;
+import org.example.problem_tag.ProblemTagRepositoryImpl;
+import org.example.tag.Tag;
+import org.example.tag.TagRepository;
+import org.example.website.Website;
+import org.example.website.WebsiteRepository;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class Config {
     public static Dimension windowSize;
+    public static Dimension formSize;
     public static Dimension mainCenterPanelSize;
     public static Dimension mainEastPanelSize;
     public static Dimension tagPanelSize;
@@ -30,6 +44,7 @@ public class Config {
         /// Frame's dimensions \\\
 
         windowSize = new Dimension(1200, 10000);
+        formSize = new Dimension(400, 400);
 
         /// Panel's dimensions \\\
 
@@ -65,5 +80,22 @@ public class Config {
 
     }
 
+    public static void resetDatabase()  {
 
+        ProblemTagRepositoryImpl.reset();
+        ProblemRepositoryImpl.reset();
+
+        AuthorRepository authorRepository = new AuthorRepository("Author", Author.class);
+        authorRepository.reset();
+
+        GroupRepository groupRepository = new GroupRepository("Grup", Group.class);
+        groupRepository.reset();
+
+        TagRepository tagRepository = new TagRepository("Tag", Tag.class);
+        tagRepository.reset();
+
+        WebsiteRepository websiteRepository = new WebsiteRepository("Website", Website.class);
+        websiteRepository.reset();
+
+    }
 }

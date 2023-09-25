@@ -14,10 +14,22 @@ public class ProblemRepositoryImpl implements ProblemRepository{
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
 
-        if(em.contains(problem))
-            em.merge(problem);
-        else
-            em.persist(problem);
+        Problem currProblem = em.find(Problem.class, problem.getId());
+        try {
+            currProblem.getName();
+            problem = em.merge(problem);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            try {
+                em.persist(problem);
+                em.flush();
+            }
+            catch(Exception ee) {
+
+            }
+        }
+
         em.getTransaction().commit();
         em.close();
     }
@@ -73,5 +85,16 @@ public class ProblemRepositoryImpl implements ProblemRepository{
         if(problemList.size() == 0)
             return null;
         return problemList.get(0);
+    }
+
+
+    public static void reset() {
+        EntityManagerFactory emf = EntityBuilder.getInstance();
+        EntityManager em = emf.createEntityManager();
+        Query query = em.createNamedQuery("Problem.reset");
+        em.getTransaction().begin();
+        query.executeUpdate();
+        em.getTransaction().commit();
+        em.close();
     }
 }

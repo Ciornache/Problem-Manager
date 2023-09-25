@@ -1,15 +1,29 @@
 package org.example.frames;
 
+import org.example.author.Author;
+import org.example.author.AuthorRepository;
 import org.example.buttons.FormCloseButton;
 import org.example.buttons.FormSubmitButton;
+import org.example.group.Group;
+import org.example.group.GroupRepository;
+import org.example.problem.Problem;
+import org.example.problem.ProblemRepository;
+import org.example.problem.ProblemRepositoryImpl;
+import org.example.utils.Config;
+import org.example.utils.CrudRepositoryImpl;
+import org.example.utils.CrudRepositoryInterface;
+import org.example.website.Website;
+import org.example.website.WebsiteRepository;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import java.util.ArrayList;
+import java.util.List;
 public class FormFrame extends JFrame {
 
+    private final List<String> tags = new ArrayList<>();
     private static FormFrame instance = null;
 
     private FormFrame() {
@@ -32,7 +46,7 @@ public class FormFrame extends JFrame {
     private  void createAndShowGUI() {
         this.setTitle("Form");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(400, 300);
+        this.setSize(Config.formSize);
 
         JPanel panel = new JPanel(new GridBagLayout());
         this.add(panel);
@@ -95,10 +109,28 @@ public class FormFrame extends JFrame {
         gbc.gridx = 1;
         panel.add(websiteField, gbc);
 
+        /// Group
+        JLabel groupLabel = new JLabel("Group:");
+        JTextField groupField = new JTextField(20);
+        gbc.gridx = 0;
+        gbc.gridy = 6;
+        panel.add(groupLabel, gbc);
+        gbc.gridx = 1;
+        panel.add(groupField, gbc);
+
+        JLabel tagsLabel = new JLabel("Tags:");
+        JTextField tagsField = new JTextField(20);
+        gbc.gridx = 0;
+        gbc.gridy = 7; // Adjust the row position
+        panel.add(tagsLabel, gbc);
+        gbc.gridx = 1;
+        panel.add(tagsField, gbc);
+
+
         // Submit Button
         JButton submitButton = new FormSubmitButton("Submit");
         gbc.gridx = 0;
-        gbc.gridy = 6;
+        gbc.gridy = 8;
         gbc.gridwidth = 1;
         gbc.anchor = GridBagConstraints.WEST;
         panel.add(submitButton, gbc);
@@ -108,6 +140,11 @@ public class FormFrame extends JFrame {
         gbc.anchor = GridBagConstraints.WEST;
         panel.add(closeButton, gbc);
 
+
+        CrudRepositoryInterface<Author> authorRepository = new AuthorRepository("Author", Author.class);
+        CrudRepositoryInterface<Group> groupRepository = new GroupRepository("Grup", Group.class);
+        ProblemRepository problemRepository = new ProblemRepositoryImpl();
+        WebsiteRepository websiteRepository = new WebsiteRepository("Website", Website.class);
         submitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -116,15 +153,42 @@ public class FormFrame extends JFrame {
                 String link = linkField.getText();
                 String solution = solutionField.getText();
                 String difficulty = difficultyField.getText();
-                String author = authorField.getText();
-                String website = websiteField.getText();
+                String authorName = authorField.getText();
+                String websiteName = websiteField.getText();
+                String groupName = groupField.getText();
 
                 // Display the submitted information
                 JOptionPane.showMessageDialog(instance,
                         "Name: " + name + "\nLink: " + link + "\nSolution: " + solution
-                                + "\nDifficulty: " + difficulty + "\nAuthor: " + author + "\nWebsite: " + website,
+                                + "\nDifficulty: " + difficulty + "\nAuthor: " + authorName + "\nWebsite: " + websiteName + "\nGroup: " + groupName,
                         "Form Submission",
                         JOptionPane.INFORMATION_MESSAGE);
+
+
+                ///  public Problem(String name, String link, String solutionLink, int difficulty, Author author, Group group)
+
+
+                /// Adding the information to the database
+
+                Author author = new Author(authorName);
+                Group group = new Group(groupName);
+                Website website = new Website(websiteName);
+                Problem problem = new Problem(name, link, solution, Integer.decode(difficulty), author, group, website);
+
+                authorRepository.addItem(author);
+                groupRepository.addItem(group);
+                problemRepository.addItem(problem);
+                websiteRepository.addItem(website);
+
+                /// Reseting the fields
+                nameField.setText("");
+                solutionField.setText("");
+                groupField.setText("");
+                authorField.setText("");
+                websiteField.setText("");
+                difficultyField.setText("");
+                linkField.setText("");
+
             }
         });
 
@@ -133,5 +197,8 @@ public class FormFrame extends JFrame {
 
         // Make the frame visible
         this.setVisible(true);
+    }
+    public List<String> getTags() {
+        return tags;
     }
 }

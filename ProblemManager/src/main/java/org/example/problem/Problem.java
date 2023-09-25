@@ -6,6 +6,7 @@ import org.example.group.Group;
 import org.example.utils.Config;
 import org.example.utils.CustomFonts;
 import org.example.utils.Spacer;
+import org.example.website.Website;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,13 +18,13 @@ import java.util.List;
 @NamedNativeQuery(name = "Problem.selectAll", query = "Select * from problem", resultClass = Problem.class)
 @NamedNativeQuery(name = "Problem.findById", query = "Select * from problem WHERE id = :id", resultClass = Problem.class)
 @NamedNativeQuery(name = "Problem.findByName", query = "Select * from problem WHERE name = :name", resultClass = Problem.class)
+@NamedNativeQuery(name = "Problem.reset", query = "Delete from problem")
 public class Problem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(name = "name")
     private String name;
-
     public int getId() {
         return id;
     }
@@ -46,13 +47,26 @@ public class Problem {
     @JoinColumn(name = "group_id")
     private Group group;
 
-    public Problem(String name, String link, String solutionLink, int difficulty, Author author, Group group) {
+    @ManyToOne()
+    @JoinColumn(name = "website_id")
+    private Website website;
+
+    public Problem(String name, String link, String solutionLink, int difficulty, Author author, Group group, Website website) {
         this.name = name;
         this.link = link;
         this.solutionLink = solutionLink;
         this.difficulty = difficulty;
         this.author = author;
         this.group = group;
+        this.website = website;
+    }
+
+    public Website getWebsite() {
+        return website;
+    }
+
+    public void setWebsite(Website website) {
+        this.website = website;
     }
 
     public Problem(String name, String link, String solutionLink, int difficulty) {
@@ -60,6 +74,20 @@ public class Problem {
         this.link = link;
         this.solutionLink = solutionLink;
         this.difficulty = difficulty;
+    }
+
+    @Override
+    public String toString() {
+        return "Problem{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", link='" + link + '\'' +
+                ", solutionLink='" + solutionLink + '\'' +
+                ", difficulty=" + difficulty +
+                ", author=" + author +
+                ", group=" + group +
+                ", website=" + website +
+                '}';
     }
 
     public Problem() {};

@@ -10,4 +10,8 @@ public interface ProblemTagRepository {
     ProblemTag findById(int id);
     ProblemTag findByName(int id);
 
+    static void reset() {
+
+    }
+
 }

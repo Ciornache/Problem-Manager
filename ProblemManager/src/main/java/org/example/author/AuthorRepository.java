@@ -1,10 +1,8 @@
 package org.example.author;
 
-import org.example.utils.CrudRepository;
+import org.example.utils.CrudRepositoryImpl;
 
-import java.io.Serializable;
-
-public class AuthorRepository extends CrudRepository<Author> {
+public class AuthorRepository extends CrudRepositoryImpl<Author> {
     public AuthorRepository(String entityName, Class<Author> className) {
         super(entityName, className);
     }

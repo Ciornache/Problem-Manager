@@ -8,15 +8,18 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "problem_tag")
+@NamedNativeQuery(name = "ProblemTag.reset", query = "Delete from problem_tag")
+@NamedNativeQuery(name = "ProblemTag.selectAll", query = "Select * from problem", resultClass = ProblemTag.class)
+@NamedNativeQuery(name = "ProblemTag.findById", query = "Select * from problem WHERE id = :id", resultClass = ProblemTag.class)
 public class ProblemTag implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @OneToMany
+    @ManyToOne
     @JoinColumn(name = "tag_id")
     private Tag tag;
-    @OneToMany
+    @ManyToOne
     @JoinColumn(name = "problem_id")
     private Problem problem;
 

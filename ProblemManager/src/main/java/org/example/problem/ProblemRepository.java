@@ -10,4 +10,8 @@ public interface ProblemRepository {
     Problem findById(int id);
     Problem findByName(int id);
 
+    public static void reset() {
+
+    }
+
 }
